@@ -1,0 +1,7 @@
+$ docker run -d -v $(pwd):/usr/share/nginx/html -p 8080:80 nginx
+$ update index.html local & refresh the browser
+$ docker stop id || docker kill id
+$ docker rm -v id
+$ docker ps -a
+$ docker images
+$ docker history
