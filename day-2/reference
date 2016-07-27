@@ -1,0 +1,59 @@
+set -ex
+
+PROJECT_NAME=${PROJECT_NAME:-"node-wrapper"}
+TAG=${TAG:-"$(date +%Y-%m-%d-%H-%M-%S)"}
+
+cleanup() {
+
+  RunningProjectContainer=$(docker ps -aq --filter="name=$PROJECT_NAME")
+  DanglingDockerImages=$(docker images -aq -f dangling=true)
+
+  if [ $RunningProjectContainer ]; then
+    echo "something running $PROJECT_NAME"
+    docker stop $RunningProjectContainer && docker rm -v $RunningProjectContainer
+  fi
+
+  if [ $DanglingDockerImages ]; then
+    echo "something container dangling"
+    docker rmi -f $DanglingDockerImages
+  fi
+}
+trap cleanup EXIT
+cleanup
+
+docker build -t $PROJECT_NAME .
+docker run -p 4000:4000 --name "$PROJECT_NAME-$TAG" -v $(pwd)/redux-todo:/root/app -v /root/app/node_modules -it $PROJECT_NAME
+
+docker cp $(docker ps -aqf "name=$PROJECT_NAME-$TAG"):/root/app/ut-result ./docker_build/
+
+
+
+# dockerignore file
+
+*/temp*
+*/*/temp*
+temp?
+
+redux-todo/node_modules
+redux-todo/ut-result
+Dockerfile
+.dockerignore
+
+
+# dockerfile
+
+FROM node:6.3
+
+WORKDIR /root/app
+COPY ./redux-todo /root/app
+RUN npm install  --loglevel warn
+
+EXPOSE 4000
+CMD ["npm", "start"]
+
+
+#cache node_modules
+
+COPY ["./redux-todo/package.json", "/tmp/package.json"]
+RUN cd /tmp && npm install --loglevel warn
+RUN mkdir -p /root/app && cp -a /tmp/node_modules /root/app/
