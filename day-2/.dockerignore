@@ -1,0 +1,5 @@
+redux-todo/node_modules
+redux-todo/ut-result
+Dockerfile
+.dockerignore
+console.sh
