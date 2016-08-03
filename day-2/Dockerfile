@@ -6,4 +6,5 @@ COPY ["./redux-todo/package.json", "/root/app"]
 RUN npm install --loglevel warn
 
 EXPOSE 4000
+
 CMD ["/bin/bash"]

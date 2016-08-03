@@ -57,3 +57,6 @@ CMD ["npm", "start"]
 COPY ["./redux-todo/package.json", "/tmp/package.json"]
 RUN cd /tmp && npm install --loglevel warn
 RUN mkdir -p /root/app && cp -a /tmp/node_modules /root/app/
+
+
+docker run -d -p 4000:4000 --link sinatra-server:sinatra -v $(pwd)/redux-todo:/root/app -v /root/app/node_modules $PROJECT_NAME npm start
