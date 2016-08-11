@@ -1,0 +1,19 @@
+version: '2'
+services:
+  web:
+    build: ../day-2/
+    ports:
+     - "4000:4000"
+    links:
+     - sinatra
+    volumes:
+     - ../day-2/redux-todo:/root/app
+     - /root/app/node_modules
+    command: bash -c "while ! netcat -z sinatra 9000; do echo waiting for sinatra; sleep 1; done; npm run start"
+
+  sinatra:
+    build: ../day-3/
+    ports:
+     - "9000:9000"
+    volumes:
+     - ../day-3/sinatra:/root/app
