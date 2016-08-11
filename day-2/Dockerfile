@@ -8,6 +8,7 @@ WORKDIR /root/app
 COPY ["./redux-todo/package.json", "/root/app"]
 RUN npm install --loglevel warn
 
+COPY ["./helpers", "/root/app/helpers"]
 EXPOSE 4000
 
 CMD ["/bin/bash"]

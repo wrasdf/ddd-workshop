@@ -9,6 +9,8 @@ services:
     volumes:
      - ../day-2/redux-todo:/root/app
      - /root/app/node_modules
+    #  - /root/app/helpers
+    # entrypoint: './helpers/wait-for-it.sh sinatra:9000 -- npm run start'
     command: bash -c "while ! netcat -z sinatra 9000; do echo waiting for sinatra; sleep 1; done; npm run start"
 
   sinatra:
