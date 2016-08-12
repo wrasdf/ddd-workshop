@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  nginx:
+    image: nginx
+    ports:
+      - 8080:80
+    volumes:
+      - ../day-1/:/usr/share/nginx/html
